@@ -17,43 +17,43 @@ class WebsiteController extends Controller
         return view('website.about');
     }
 
-    public function index(): View
+    public function state(): View
     {
-        return view('website.index');
+        return view('website.state');
     }
 
-    public function index(): View
+    public function city(): View
     {
-        return view('website.index');
+        return view('website.city');
     }
 
-    public function index(): View
+    public function neighborhood(): View
     {
-        return view('website.index');
+        return view('website.neighborhood');
     }
 
-    public function index(): View
+    public function contact(): View
     {
-        return view('website.index');
+        return view('website.contact');
     }
 
-    public function index(): View
+    public function deals(): View
     {
-        return view('website.index');
+        return view('website.deals');
     }
 
-    public function index(): View
+    public function packages(): View
     {
-        return view('website.index');
+        return view('website.packages');
     }
 
-    public function index(): View
+    public function privacy(): View
     {
-        return view('website.index');
+        return view('website.privacy');
     }
 
-    public function index(): View
+    public function serviceArea(): View
     {
-        return view('website.index');
+        return view('website.serviceArea');
     }
 }
