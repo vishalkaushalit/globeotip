@@ -150,6 +150,13 @@ a {
     transform: translateX(4px);
 }
 
+/* Authentication forms */
+.login_sec input:focus {
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 107, 0.2);
+}
+
 /* Navigation */
 .navbar {
     position: fixed;
