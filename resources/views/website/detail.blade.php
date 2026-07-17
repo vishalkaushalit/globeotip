@@ -59,10 +59,10 @@
                             class="text-theme-primary text-decoration-none">Home</a></li>
                     <li class="breadcrumb-item"><a href="/service-area"
                             class="text-theme-primary text-decoration-none">Service Area</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('website.state', ['slug' => $area->state->slug]) }}"
+                    <li class="breadcrumb-item"><a href="{{ route('website.state', ['state' => $area->state]) }}"
                             class="text-theme-primary text-decoration-none">{{ $state }}</a></li>
                     <li class="breadcrumb-item"><a
-                            href="{{ route('website.city', ['slug' => $area->city->slug]) }}"
+                            href="{{ route('website.city', ['state' => $area->state, 'city' => $area->city]) }}"
                             class="text-theme-primary text-decoration-none">{{ $city }}</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $neighborhood }}</li>
                 </ol>

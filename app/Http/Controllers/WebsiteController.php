@@ -6,7 +6,6 @@ use App\Models\City;
 use App\Models\Neighbourhood;
 use App\Models\State;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
 {
@@ -21,25 +20,21 @@ class WebsiteController extends Controller
         return view('website.about');
     }
 
-    public function state(Request $request): View
+    public function state(State $state): View
     {
-        $state = State::where('slug', $request->string('slug'))
-            ->orWhere('name', $request->string('name'))->firstOrFail();
         return view('website.state', ['state' => $state, 'cities' => $state->cities()->orderBy('name')->paginate(6)]);
     }
 
-    public function city(Request $request): View
+    public function city(State $state, City $city): View
     {
-        $city = City::with('state')->where('slug', $request->string('slug'))
-            ->orWhere('name', $request->string('name'))->firstOrFail();
+        $city->setRelation('state', $state);
         return view('website.city', ['city' => $city, 'neighbourhoods' => $city->neighbourhoods()->where('status', true)->orderBy('name')->paginate(6)]);
     }
 
-    public function detail(Request $request): View
+    public function detail(State $state, City $city, Neighbourhood $neighbourhood): View
     {
-        $area = Neighbourhood::with('state','city')->where('slug', $request->string('slug'))
-            ->orWhere('name', $request->string('neighborhood'))->firstOrFail();
-        return view('website.detail', ['area' => $area, 'state' => $area->state->name, 'city' => $area->city->name, 'neighborhood' => $area->name]);
+        $neighbourhood->setRelation('state', $state)->setRelation('city', $city);
+        return view('website.detail', ['area' => $neighbourhood, 'state' => $state->name, 'city' => $city->name, 'neighborhood' => $neighbourhood->name]);
     }
 
     public function contact(): View

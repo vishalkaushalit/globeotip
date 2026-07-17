@@ -19,11 +19,15 @@ class ServiceAreaManagementTest extends TestCase
     public function test_static_service_area_data_is_seeded_and_visible_publicly(): void
     {
         $this->seed(ServiceAreaSeeder::class);
+        $state = State::where('slug', 'california')->firstOrFail();
+        $city = City::where('slug', 'los-angeles')->firstOrFail();
+        $area = Neighbourhood::where('slug', 'hollywood')->firstOrFail();
 
         $this->get(route('website.serviceArea'))->assertOk()->assertSee('California');
-        $this->get(route('website.state', ['slug' => 'california']))->assertOk()->assertSee('Los Angeles');
-        $this->get(route('website.city', ['slug' => 'los-angeles']))->assertOk()->assertSee('Atwater Village');
-        $this->get(route('website.detail', ['slug' => 'hollywood']))->assertOk()->assertSee('Tour Itinerary');
+        $this->get(route('website.state', ['state' => $state]))->assertOk()->assertSee('Los Angeles');
+        $this->get(route('website.city', ['state' => $state, 'city' => $city]))->assertOk()->assertSee('Atwater Village');
+        $this->get(route('website.detail', ['state' => $state, 'city' => $city, 'neighbourhood' => $area]))->assertOk()->assertSee('Tour Itinerary');
+        $this->assertSame('/service-area/california/los-angeles/hollywood', route('website.detail', [$state, $city, $area], false));
     }
 
     public function test_admin_can_manage_related_service_area_records(): void
