@@ -52,7 +52,7 @@
         <header id="header" class="header fixed-top d-flex align-items-center">
 
             <div class="d-flex align-items-center justify-content-between">
-                <a href="{{ url('/') }}" class="logo" aria-label="Globeotip Home">
+                <a href="{{ url('/') }}" class="logo" aria-label="Globeotrip Home">
                     <img src="{{ asset('assets/images/globeotrip.png') }}" alt="Travel Agency Logo" class="logo-img">
                 </a>
 

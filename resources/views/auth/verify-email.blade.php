@@ -1,7 +1,7 @@
 <x-guest-layout>
     <?php
-    $pageTitle = 'Globeotip - Verify Email';
-    $pageDescription = 'Verify your email address to finish setting up your Globeotip account.';
+    $pageTitle = 'Globeotrip - Verify Email';
+    $pageDescription = 'Verify your email address to finish setting up your Globeotrip account.';
     ?>
 
     <section class="page-banner inner-banner">

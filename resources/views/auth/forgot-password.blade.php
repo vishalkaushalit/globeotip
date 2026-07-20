@@ -1,7 +1,7 @@
 <x-guest-layout>
     <?php
-    $pageTitle = 'Globeotip - Forgot Password';
-    $pageDescription = 'Request a Globeotip password reset link to regain access to your account.';
+    $pageTitle = 'Globeotrip - Forgot Password';
+    $pageDescription = 'Request a Globeotrip password reset link to regain access to your account.';
     ?>
 
     <section class="page-banner inner-banner">

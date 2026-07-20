@@ -1,7 +1,7 @@
 <x-guest-layout>
     <?php
-    $pageTitle = 'Globeotip - Confirm Password';
-    $pageDescription = 'Confirm your Globeotip account password before continuing.';
+    $pageTitle = 'Globeotrip - Confirm Password';
+    $pageDescription = 'Confirm your Globeotrip account password before continuing.';
     ?>
 
     <section class="page-banner inner-banner">

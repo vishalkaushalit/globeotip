@@ -1,7 +1,7 @@
 <x-guest-layout>
     <?php
-    $pageTitle = 'Globeotip - Register';
-    $pageDescription = 'Create your Globeotip account to explore and book flights, hotels, and holiday destinations around the world.';
+    $pageTitle = 'Globeotrip - Register';
+    $pageDescription = 'Create your Globeotrip account to explore and book flights, hotels, and holiday destinations around the world.';
     ?>
 
     <section class="page-banner inner-banner">
