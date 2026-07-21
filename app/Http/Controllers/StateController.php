@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\State;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -16,5 +17,15 @@ class StateController extends Controller
     public function edit(State $state): View { return view('service-areas.states.form', ['item' => $state]); }
     public function update(Request $request, State $state): RedirectResponse { $state->update($this->validateData($request, $state)); return to_route('states.index')->with('success', 'State updated successfully.'); }
     public function destroy(State $state): RedirectResponse { $state->delete(); return to_route('states.index')->with('success', 'State deleted successfully.'); }
-    private function validateData(Request $request, ?State $state = null): array { return $request->validate(['name' => ['required','string','max:255'], 'slug' => ['required','alpha_dash','max:255', Rule::unique('states')->ignore($state)]]); }
+    private function validateData(Request $request, ?State $state = null): array
+    {
+        $request->merge([
+            'slug' => filled($request->input('slug')) ? $request->input('slug') : Str::slug($request->input('name', '')),
+        ]);
+
+        return $request->validate([
+            'name' => ['required','string','max:255'],
+            'slug' => ['required','alpha_dash','max:255', Rule::unique('states')->ignore($state)],
+        ]);
+    }
 }

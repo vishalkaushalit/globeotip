@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\State;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -17,5 +18,16 @@ class CityController extends Controller
     public function edit(City $city): View { return view('service-areas.cities.form', ['item' => $city, 'states' => State::orderBy('name')->get()]); }
     public function update(Request $request, City $city): RedirectResponse { $city->update($this->validateData($request, $city)); return to_route('cities.index')->with('success', 'City updated successfully.'); }
     public function destroy(City $city): RedirectResponse { $city->delete(); return to_route('cities.index')->with('success', 'City deleted successfully.'); }
-    private function validateData(Request $request, ?City $city = null): array { return $request->validate(['state_id' => ['required','exists:states,id'], 'name' => ['required','string','max:255'], 'slug' => ['required','alpha_dash','max:255', Rule::unique('cities')->where(fn($q) => $q->where('state_id', $request->integer('state_id')))->ignore($city)]]); }
+    private function validateData(Request $request, ?City $city = null): array
+    {
+        $request->merge([
+            'slug' => filled($request->input('slug')) ? $request->input('slug') : Str::slug($request->input('name', '')),
+        ]);
+
+        return $request->validate([
+            'state_id' => ['required','exists:states,id'],
+            'name' => ['required','string','max:255'],
+            'slug' => ['required','alpha_dash','max:255', Rule::unique('cities')->where(fn($q) => $q->where('state_id', $request->integer('state_id')))->ignore($city)],
+        ]);
+    }
 }

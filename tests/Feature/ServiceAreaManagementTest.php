@@ -49,6 +49,42 @@ class ServiceAreaManagementTest extends TestCase
         $this->assertSame(['Guided tour'], $area->highlights);
     }
 
+    public function test_blank_service_area_slugs_are_generated_from_names(): void
+    {
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+
+        $this->actingAs($admin)->post(route('states.store'), [
+            'name' => 'New York State',
+            'slug' => '',
+        ])->assertRedirect(route('states.index'));
+
+        $state = State::where('slug', 'new-york-state')->firstOrFail();
+
+        $this->actingAs($admin)->post(route('cities.store'), [
+            'state_id' => $state->id,
+            'name' => 'New York City',
+            'slug' => '',
+        ])->assertRedirect(route('cities.index'));
+
+        $city = City::where('state_id', $state->id)->where('slug', 'new-york-city')->firstOrFail();
+
+        $this->actingAs($admin)->post(route('neighbourhoods.store'), [
+            'state_id' => $state->id,
+            'city_id' => $city->id,
+            'name' => 'Upper East Side',
+            'slug' => '',
+            'days' => 2,
+            'nights' => 1,
+            'price' => 299,
+            'status' => 1,
+        ])->assertRedirect(route('neighbourhoods.index'));
+
+        $this->assertDatabaseHas('neighbourhoods', [
+            'city_id' => $city->id,
+            'slug' => 'upper-east-side',
+        ]);
+    }
+
     public function test_author_cannot_access_service_area_management(): void
     {
         $author = User::factory()->create(['role' => User::ROLE_AUTHOR]);

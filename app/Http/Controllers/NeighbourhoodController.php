@@ -8,6 +8,7 @@ use App\Models\State;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -29,6 +30,10 @@ class NeighbourhoodController extends Controller
     private function form(Neighbourhood $item): View { return view('service-areas.neighbourhoods.form', ['item' => $item, 'states' => State::orderBy('name')->get(), 'cities' => City::orderBy('name')->get()]); }
     private function validateData(Request $request, ?Neighbourhood $item = null): array
     {
+        $request->merge([
+            'slug' => filled($request->input('slug')) ? $request->input('slug') : Str::slug($request->input('name', '')),
+        ]);
+
         $data = $request->validate([
             'state_id' => ['required','exists:states,id'], 'city_id' => ['required', Rule::exists('cities','id')->where(fn($q) => $q->where('state_id',$request->integer('state_id')))],
             'name' => ['required','string','max:255'], 'slug' => ['required','alpha_dash','max:255', Rule::unique('neighbourhoods')->where(fn($q) => $q->where('city_id',$request->integer('city_id')))->ignore($item)],
