@@ -22,8 +22,8 @@
             </a>
         </li>
 
-        @if (Auth::user()->isAdmin())
-            <li class="nav-heading">Administration</li>
+        @if (Auth::user()->canManageServiceAreas())
+            <li class="nav-heading">{{ Auth::user()->isAdmin() ? 'Administration' : 'Content Management' }}</li>
 
             <li class="nav-item">
                 <a class="nav-link {{ $serviceAreaOpen ? '' : 'collapsed' }}" data-bs-target="#service-area-nav"
@@ -37,14 +37,25 @@
                 </ul>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('users.*') ? '' : 'collapsed' }}"
-                    href="{{ route('users.index') }}"
-                    @if(request()->routeIs('users.*')) aria-current="page" @endif>
-                    <i class="bi bi-people"></i>
-                    <span>Users</span>
-                </a>
-            </li>
+            @if (Auth::user()->isAdmin())
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('users.*') ? '' : 'collapsed' }}"
+                        href="{{ route('users.index') }}"
+                        @if(request()->routeIs('users.*')) aria-current="page" @endif>
+                        <i class="bi bi-people"></i>
+                        <span>Users</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('activity-logs.*') ? '' : 'collapsed' }}"
+                        href="{{ route('activity-logs.index') }}"
+                        @if(request()->routeIs('activity-logs.*')) aria-current="page" @endif>
+                        <i class="bi bi-clock-history"></i>
+                        <span>Activity Log</span>
+                    </a>
+                </li>
+            @endif
         @endif
 
         <li class="nav-heading">Website</li>

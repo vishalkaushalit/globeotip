@@ -9,6 +9,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -16,9 +17,15 @@ class User extends Authenticatable
 
     public const ROLE_AUTHOR = 'author';
 
+    public const ROLE_EDITOR = 'editor';
+
+    public const ROLE_SUBSCRIBER = 'subscriber';
+
     public const ROLES = [
         self::ROLE_ADMIN => 'Admin',
         self::ROLE_AUTHOR => 'Author',
+        self::ROLE_EDITOR => 'Editor',
+        self::ROLE_SUBSCRIBER => 'Subscriber',
     ];
 
     /** @use HasFactory<UserFactory> */
@@ -99,8 +106,28 @@ class User extends Authenticatable
         return $this->hasRole(self::ROLE_AUTHOR);
     }
 
+    public function isEditor(): bool
+    {
+        return $this->hasRole(self::ROLE_EDITOR);
+    }
+
+    public function isSubscriber(): bool
+    {
+        return $this->hasRole(self::ROLE_SUBSCRIBER);
+    }
+
+    public function canManageServiceAreas(): bool
+    {
+        return $this->hasRole([self::ROLE_ADMIN, self::ROLE_EDITOR]);
+    }
+
     public function hasRole(string|array $roles): bool
     {
         return in_array($this->role, (array) $roles, true);
+    }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 }

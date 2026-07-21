@@ -55,6 +55,36 @@ class ServiceAreaManagementTest extends TestCase
         $this->actingAs($author)->get(route('states.index'))->assertForbidden();
     }
 
+    public function test_editor_can_manage_service_areas_but_cannot_manage_users(): void
+    {
+        $editor = User::factory()->create(['role' => User::ROLE_EDITOR]);
+
+        $this->actingAs($editor)
+            ->get(route('states.index'))
+            ->assertOk()
+            ->assertSee('States');
+
+        $this->actingAs($editor)
+            ->get(route('users.index'))
+            ->assertForbidden();
+
+        $this->actingAs($editor)
+            ->get(route('activity-logs.index'))
+            ->assertForbidden();
+    }
+
+    public function test_subscriber_is_limited_to_dashboard_profile_and_website(): void
+    {
+        $subscriber = User::factory()->create(['role' => User::ROLE_SUBSCRIBER]);
+
+        $this->actingAs($subscriber)->get(route('dashboard'))->assertOk();
+        $this->actingAs($subscriber)->get(route('profile.edit'))->assertOk();
+        $this->actingAs($subscriber)->get(route('website.index'))->assertOk();
+        $this->actingAs($subscriber)->get(route('states.index'))->assertForbidden();
+        $this->actingAs($subscriber)->get(route('users.index'))->assertForbidden();
+        $this->actingAs($subscriber)->get(route('activity-logs.index'))->assertForbidden();
+    }
+
     public function test_admin_can_upload_and_delete_a_neighbourhood_image(): void
     {
         Storage::fake('public');

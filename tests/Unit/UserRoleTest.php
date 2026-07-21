@@ -21,4 +21,16 @@ class UserRoleTest extends TestCase
         $this->assertFalse($user->isAdmin());
         $this->assertTrue($user->isAuthor());
     }
+
+    public function test_admin_and_editor_can_manage_service_areas(): void
+    {
+        $admin = new User(['role' => User::ROLE_ADMIN]);
+        $editor = new User(['role' => User::ROLE_EDITOR]);
+        $subscriber = new User(['role' => User::ROLE_SUBSCRIBER]);
+
+        $this->assertTrue($admin->canManageServiceAreas());
+        $this->assertTrue($editor->canManageServiceAreas());
+        $this->assertFalse($subscriber->canManageServiceAreas());
+        $this->assertTrue($subscriber->isSubscriber());
+    }
 }

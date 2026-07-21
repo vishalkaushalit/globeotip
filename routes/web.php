@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\CityController;
@@ -32,14 +33,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware('role:admin')->group(function () {
+    Route::middleware('role:admin,editor')->group(function () {
         Route::delete('neighbourhoods/{neighbourhood}/images/{field}', [NeighbourhoodController::class, 'destroyImage'])->name('neighbourhoods.images.destroy');
-        Route::resource('users', UserController::class)->except(['show']);
         Route::resources([
             'states' => StateController::class,
             'cities' => CityController::class,
             'neighbourhoods' => NeighbourhoodController::class,
         ], ['except' => ['show']]);
+    });
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+        Route::resource('users', UserController::class)->except(['show']);
     });
 });
 

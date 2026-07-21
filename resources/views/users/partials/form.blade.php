@@ -6,7 +6,7 @@
         <label for="role" class="form-label">Role</label>
         <select id="role" name="role" class="form-select" required>
             @foreach ($roles as $value => $label)
-                <option value="{{ $value }}" @selected(old('role', $user?->role ?? \App\Models\User::ROLE_AUTHOR) === $value)>{{ $label }}</option>
+                <option value="{{ $value }}" @selected(old('role', $user?->role ?? \App\Models\User::ROLE_SUBSCRIBER) === $value)>{{ $label }}</option>
             @endforeach
         </select>
     </div>
